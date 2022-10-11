@@ -18,7 +18,7 @@ H1_DIM = 16
 H2_DIM = 16
 OUT_DIM = 10
 LR = 0.001
-EPOCH = 5
+EPOCH = 5_000_000
 
 #loss data
 
@@ -55,7 +55,7 @@ def softmax(x : int) -> int: #probability distribution
     ep = np.exp(x)
     return ep / np.sum(ep)
 
-def relu (t : float) -> float: #activator function
+def sigmoid (t : float) -> float: #activator function
     return 1 / (1 + np.exp(-t))
 
 def to_right_answer(y : int, num_classes : int) -> list: #find answer by index
@@ -66,8 +66,8 @@ def to_right_answer(y : int, num_classes : int) -> list: #find answer by index
 def sparse_cross_entropy(z : list, y : int) -> float: #calculate loss 
     return -np.log(z[0, y])
 
-def relu_deriv(t : float) -> int: #derivative activator function
-    return relu(t) * (1 - relu(t))
+def sigmoid_deriv(t : float) -> int: #derivative activator function
+    return sigmoid(t) * (1 - sigmoid(t))
 
 #back propogation
 
@@ -81,9 +81,9 @@ for i in range(EPOCH):
     #forward
 
     t1 = x @ W1 + b1
-    h1 = relu(t1)
+    h1 = sigmoid(t1)
     t2 = h1 @ W2 + b2
-    h2 = relu(t2)
+    h2 = sigmoid(t2)
     t3 = h2 @ W3 + b3
     z = softmax(t3)
 
@@ -102,11 +102,11 @@ for i in range(EPOCH):
     dE_dW3 = h2.T @ dE_dt3
     dE_db3 = dE_dt3
     dE_dh2 = dE_dt3 @ W3.T
-    dE_dt2 = dE_dh2 * relu_deriv(t2)
+    dE_dt2 = dE_dh2 * sigmoid_deriv(t2)
     dE_dW2 = h1.T @ dE_dt2
     dE_db2 = dE_dt2
     dE_dh1 = dE_dt2 @ W2.T
-    dE_dt1 = dE_dh1 * relu_deriv(t1)
+    dE_dt1 = dE_dh1 * sigmoid_deriv(t1)
     dE_dW1 = x.T @ dE_dt1
     dE_db1 = dE_dt1
 
