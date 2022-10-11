@@ -21,7 +21,7 @@ with open('b2.json') as w1:
 with open('b3.json') as w1:
     b3 = np.array(json.load(w1))
 
-def relu (t : float) -> float: #activator function
+def sigmoid (t : float) -> float: #activator function
     return 1 / (1 + np.exp(-t))
 
 def softmax(x : int) -> int: #probability distribution
@@ -35,9 +35,9 @@ x = np.array([0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 #forward
 
 t1 = x @ W1 + b1
-h1 = relu(t1)
+h1 = sigmoid(t1)
 t2 = h1 @ W2 + b2
-h2 = relu(t2)
+h2 = sigmoid(t2)
 t3 = h2 @ W3 + b3
 z = softmax(t3)
 
